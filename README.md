@@ -10,14 +10,16 @@
 
 * **Shadcn/ui** – [https://ui.shadcn.com/](https://ui.shadcn.com/)
 
+* **Zustand** - [https://github.com/pmndrs/zustand](https://github.com/pmndrs/zustand)
+
 * **Tailwind CSS** – [https://tailwindcss.com/](https://tailwindcss.com/)
 
 
 ## Running
 
 ```bash
-npm install
-npm run dev
+pnpm install
+pnpm run dev
 ```
 
 App will run under:
