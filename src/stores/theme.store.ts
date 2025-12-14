@@ -4,7 +4,10 @@ import { persist } from "zustand/middleware";
 export type Theme = "dark" | "light" | "system";
 
 interface ThemeState {
+  // State
   theme: Theme;
+
+  // Actions
   setTheme: (theme: Theme) => void;
   applyTheme: (theme: Theme) => void;
 }
