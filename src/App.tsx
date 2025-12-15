@@ -1,16 +1,88 @@
-import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
+import { AnimatePresence, LayoutGroup } from 'framer-motion'
+import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom'
+
+import AppSidebar from '@/components/features/app-sidebar'
+import { ProtectedRoute } from '@/components/features/protected-route'
+import { useAuth } from '@/hooks/use-auth'
+import DashboardPage from '@/pages/dashboard-page'
+import FeedPage from '@/pages/feed-page'
 import { ThemeProvider } from '@/providers/theme.provider'
-import HomePage from '@/pages/home-page'
+import AuthPage from '@/pages/auth-page'
+
+const AppRoutes = () => {
+  const location = useLocation()
+  const isAuthRoute = location.pathname === '/login' || location.pathname === '/register'
+
+  return (
+    <LayoutGroup>
+      <AnimatePresence mode="wait" initial={false}>
+        <Routes location={location} key={isAuthRoute ? 'auth' : location.pathname}>
+          <Route
+            path="/feed"
+            element={
+              <ProtectedRoute requiresAuth>
+                <FeedPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/search"
+            element={
+              <ProtectedRoute requiresAuth>
+                <FeedPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/activities"
+            element={
+              <ProtectedRoute requiresAuth>
+                <FeedPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute requiresAuth>
+                <DashboardPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/login"
+            element={
+              <ProtectedRoute isPublicOnly>
+                <AuthPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/register"
+            element={
+              <ProtectedRoute isPublicOnly>
+                <AuthPage />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </AnimatePresence>
+    </LayoutGroup>
+  )
+}
 
 function App() {
+  const { isAuthenticated } = useAuth()
+
   return (
     <ThemeProvider>
       <Router>
-        {/* Navbar? */}
-        <div className="flex flex-col h-screen overflow-auto">
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-          </Routes>
+        <div className="flex h-screen overflow-hidden">
+          {isAuthenticated ? <AppSidebar /> : null}
+
+          <div className="min-w-0 flex-1 overflow-x-hidden overflow-y-hidden">
+            <AppRoutes />
+          </div>
         </div>
       </Router>
     </ThemeProvider>
