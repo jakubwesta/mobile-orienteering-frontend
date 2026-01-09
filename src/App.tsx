@@ -8,6 +8,8 @@ import DashboardPage from '@/pages/dashboard-page'
 import FeedPage from '@/pages/feed-page'
 import { ThemeProvider } from '@/providers/theme.provider'
 import AuthPage from '@/pages/auth-page'
+import SearchPage from './pages/search-page'
+import AccountPage from './pages/account-page'
 
 const AppRoutes = () => {
   const location = useLocation()
@@ -29,7 +31,7 @@ const AppRoutes = () => {
             path="/search"
             element={
               <ProtectedRoute requiresAuth>
-                <FeedPage />
+                <SearchPage />
               </ProtectedRoute>
             }
           />
@@ -37,7 +39,7 @@ const AppRoutes = () => {
             path="/activities"
             element={
               <ProtectedRoute requiresAuth>
-                <FeedPage />
+                <AccountPage />
               </ProtectedRoute>
             }
           />
@@ -80,7 +82,7 @@ function App() {
         <div className="flex h-screen overflow-hidden">
           {isAuthenticated ? <AppSidebar /> : null}
 
-          <div className="min-w-0 flex-1 overflow-x-hidden overflow-y-hidden">
+          <div className="min-w-0 flex-1 overflow-y-auto">
             <AppRoutes />
           </div>
         </div>
