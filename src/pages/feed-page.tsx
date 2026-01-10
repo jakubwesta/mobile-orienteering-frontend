@@ -1,7 +1,13 @@
 import PostCard from "@/components/feed/post-card"
 import type { Post } from "@/types/post"
+import { useEffect, useState } from "react"
 
-const posts: Post[] = [
+/*
+API TO DO:
+fetchFeed()
+*/
+
+const postsDemo: Post[] = [
   {
     id: 1,
     title: "Morning run",
@@ -95,6 +101,30 @@ const posts: Post[] = [
 ]
 
 const FeedPage = () => {
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  const getFeed = async () => {
+    try {
+      //const posts = await fetchFeed()
+      setPosts(postsDemo)
+      setError(null)
+    } catch (err) {
+      console.log(err);
+      setError("Error while loading feed");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    getFeed()
+  }, [])
+
+  if (loading) return <p>Loading...</p>
+  if (error) return <p>{error}</p>
+
   return (
     <div>
       {posts.map((post) => (

@@ -5,6 +5,15 @@ import { useParams } from "react-router-dom"
 import { useUser } from "@/hooks/use-user"
 import type { User } from "@/services/user.service"
 
+
+/*
+API TO DO:
+existsByFollowerIdAndFollowingId
+getPublicAndFollowersPostsByUserId
+getPublicPostsByUserId
+getAllPostsByUserId
+*/
+
 const userPosts: Post[] = [
     { id: 1, title: "Morning run", userFullName: "John Doe", username: "johndoe", date: "10.01.2025", distance: "5.2km", duration: "28min" },
     { id: 2, title: "Easy run", userFullName: "John Doe", username: "johndoe", date: "09.01.2025", distance: "3.5km", duration: "20min" },
@@ -16,14 +25,23 @@ const userPosts: Post[] = [
     { id: 8, title: "Track session", userFullName: "John Doe", username: "johndoe", date: "06.01.2025", distance: "10km", duration: "48min" },
     { id: 9, title: "Tempo run", userFullName: "John Doe", username: "johndoe", date: "06.01.2025", distance: "9km", duration: "42min" },
 ]
-const userData = {
-    username: "annaK",
-    fullName: "Anna Kowalska",
-    followers: 1234,
-    following: 567
-}
 
-const existsByFollowerIdAndFollowingId = true
+
+const FollowButtonStatus = {
+    Follow: "Follow",
+    WithdrawRequest: "WithdrawRequest",
+    Unfollow: "Unfollow",
+} as const;
+
+type FollowButtonStatusType =
+    typeof FollowButtonStatus[keyof typeof FollowButtonStatus];
+
+const followButtonText: Record<FollowButtonStatusType, string> = {
+    Follow: "Follow",
+    WithdrawRequest: "Withdraw request",
+    Unfollow: "Unfollow",
+};
+
 
 export default function AccountPage() {
     const { currentUser, viewedUser, fetchCurrentUser, fetchUserById } = useUser()
@@ -32,34 +50,57 @@ export default function AccountPage() {
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
     const [posts, setPosts] = useState<Post[]>([]);
-    const [followed, setFollowed] = useState(false)
+    const [followButtonStatus, setFollowButtonStatus] = useState<FollowButtonStatusType>(FollowButtonStatus.Follow)
     const userToShow: User | null = parId ? viewedUser : currentUser;
 
 
     useEffect(() => {
         const getAccountDetails = async () => {
             try {
-                let userId
-                if (parId) {
-                    userId = parId
-                    await fetchUserById(userId)
-                } else {
-                    if (!currentUser) {
-                        await fetchCurrentUser()
-                    }
-                    userId = currentUser?.id!
+                if (!currentUser) {
+                    await fetchCurrentUser()
                 }
 
-                const posts = userPosts
-                setPosts(posts)
+                if (parId) {
+                    await fetchUserById(parId)
 
-                const followed = existsByFollowerIdAndFollowingId
-                setFollowed(followed)
+                    //sprawdz polaczenie curennt usera z userem z par id
+                    const followed = false;
 
+                    if (followed) {
+                        setFollowButtonStatus(FollowButtonStatus.Unfollow)
 
+                        //wczytaj posty o visability follower i public
+
+                        const posts = userPosts
+                        setPosts(posts)
+
+                    } else {
+                        //sprawdz czy jest follow request current usera na targert = user z par id
+                        const isPending = true
+
+                        if (isPending) {
+                            setFollowButtonStatus(FollowButtonStatus.WithdrawRequest)
+                        } else {
+                            setFollowButtonStatus(FollowButtonStatus.Follow)
+                        }
+
+                        //wczytaj posty o visability public
+
+                        const posts = userPosts
+                        setPosts(posts)
+                    }
+
+                } else {
+
+                    //wczytaj wszystkie posty (private, followers, public)
+                    const posts = userPosts
+                    setPosts(posts)
+
+                }
             } catch (err) {
                 console.log(err);
-                setError("Error loading account details");
+                setError("Error while loading account details");
             } finally {
                 setLoading(false);
             }
@@ -67,10 +108,51 @@ export default function AccountPage() {
         getAccountDetails()
     }, [])
 
+    useEffect(() => {
+        if (!parId) return;
+        const loadPostsByVisibility = async () => {
+            try {
+                setLoading(true);
+
+                switch (followButtonStatus) {
+                    case FollowButtonStatus.Unfollow:
+                        //wczytaj posty o visability follower i public i ustaw
+
+                        break;
+
+                    case FollowButtonStatus.WithdrawRequest:
+                        //wczytaj posty o visability public i ustaw
+
+                        break;
+
+                    case FollowButtonStatus.Follow:
+                        //wczytaj posty o visability public i ustaw
+
+                        break;
+                }
+            } catch (err) {
+                console.log(err);
+                setError("Error while loading posts");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        loadPostsByVisibility();
+    }, [followButtonStatus])
+
     const handleClick = () => {
-        //send create user follows connection
-        // or delete connection 
-        setFollowed((prev) => !prev)
+        if (followButtonStatus === FollowButtonStatus.Unfollow) {
+            setFollowButtonStatus(FollowButtonStatus.Follow)
+        } else if (followButtonStatus === FollowButtonStatus.WithdrawRequest) {
+            setFollowButtonStatus(FollowButtonStatus.Follow)
+        } else if (followButtonStatus === FollowButtonStatus.Follow) {
+            if (userToShow?.private) {
+                setFollowButtonStatus(FollowButtonStatus.WithdrawRequest)
+            } else {
+                setFollowButtonStatus(FollowButtonStatus.Unfollow)
+            }
+        }
     }
 
     if (loading) return <p>Loading...</p>
@@ -82,13 +164,9 @@ export default function AccountPage() {
             <div>
                 <p>posts</p>
                 <p>{posts.length}</p>
-                <p>followers</p>
-                <p>{userData.followers}</p>
-                <p>following</p>
-                <p>{userData.following}</p>
                 <p>{userToShow.fullName}</p>
                 <p>@{userToShow.username}</p>
-                {parId && <button type="button" onClick={handleClick}>{followed ? "unfollow" : "follow"}</button>}
+                {parId && <button type="button" onClick={handleClick}>{followButtonText[followButtonStatus]}</button>}
                 <div>
                     {userPosts.map((post) => (
                         <PostCard

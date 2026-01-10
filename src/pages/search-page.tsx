@@ -2,6 +2,12 @@ import { useState } from "react"
 import type { UserResult } from "@/types/user-results"
 import UserCard from "@/components/search/user-card"
 
+/*
+API TO DO:
+fetchUsersBySearchQuery
+*/
+
+
 const allUsers: UserResult[] = [
     { id: 1, fullName: "Anna Kowalska", username: "annaK" },
     { id: 2, fullName: "Jan Nowak", username: "janN" },
@@ -15,36 +21,56 @@ const allUsers: UserResult[] = [
 
 export default function SearchPage() {
     const [searchQuery, setSearchQuery] = useState("")
+    const [error, setError] = useState<string | null>(null);
+    const [loading, setLoading] = useState(false);
+    const [users, setUsers] = useState<UserResult[]>([])
 
-    const filteredUsers = allUsers.filter(user =>
-        user.username.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        user.fullName.toLowerCase().includes(searchQuery.toLowerCase())
-    )
+
+    const onSearchSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        if (!searchQuery.trim()) {
+            setUsers([])
+            return
+        }
+        setLoading(true);
+        try {
+            //const fetchedUsers = await fetchUsersBySearchQuery(searchQuery);
+            setUsers(allUsers);
+            setError(null);
+        } catch (err) {
+            console.log(err);
+            setError("Error while loading search results");
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    if (loading) return <p>Loading...</p>
+    if (error) return <p>{error}</p>
+
 
     return (
         <div>
             <div>
-                <input
-                    type="text"
-                    placeholder="Search by nickname or name..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                />
+                <form onSubmit={onSearchSubmit}>
+                    <input
+                        type="text"
+                        placeholder="Type there..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+                    <button type="submit">
+                        Find
+                    </button>
+                </form>
             </div>
             <div>
-                {searchQuery === "" ? (
-                    <p>
-                        Start typing to search for users
-                    </p>
-                ) : filteredUsers.length === 0 ? (
-                    <p>
-                        No users found
-                    </p>
-                ) : (
-                    filteredUsers.map((user) => (
-                        <UserCard key={user.id} user={user} />
-                    ))
-                )}
+                {(users.length === 0) ? (
+                    <p>Search by fullname or username</p>
+                ) : (users.map((user) => (
+                    <UserCard key={user.id} user={user} />
+                )))
+                }
             </div>
         </div>
     )
