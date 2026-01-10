@@ -67,6 +67,14 @@ const AppRoutes = () => {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/user/:id"
+            element={
+              <ProtectedRoute requiresAuth>
+                <AccountPage />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </AnimatePresence>
     </LayoutGroup>

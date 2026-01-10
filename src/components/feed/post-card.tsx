@@ -1,4 +1,3 @@
-import { useState } from "react"
 import ActivityCard from "./activity-card"
 
 type PostCardProps = {
@@ -11,12 +10,6 @@ type PostCardProps = {
 }
 
 function PostCard({ title, userFullName, username, date, distance, duration }: PostCardProps) {
-    const [liked, setLiked] = useState(false)
-
-    const handleLike = () => {
-        setLiked((prev) => !prev)
-    }
-
     return (
         <div>
             <ActivityCard
@@ -27,14 +20,6 @@ function PostCard({ title, userFullName, username, date, distance, duration }: P
                 distance={distance}
                 duration={duration}
             />
-            <div>
-                <button
-                    type="button"
-                    onClick={handleLike}
-                >
-                    {liked ? "♥ Liked" : "♡ Like"}
-                </button>
-            </div>
         </div>
     )
 }
