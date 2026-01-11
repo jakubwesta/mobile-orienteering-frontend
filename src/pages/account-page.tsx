@@ -1,23 +1,22 @@
 import PostCard from "@/components/feed/post-card"
-import type { Post } from "@/types/post"
 import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import { useUser } from "@/hooks/use-user"
 import type { User } from "@/services/user.service"
+import type { Post } from "@/services/post.service"
+import { userFollowService } from "@/services/user-follows.service"
+import { followRequestService } from "@/services/follow-request.service"
 
 
 /*
 API TO DO:
-existsByFollowerIdAndFollowingId
-getPublicAndFollowersPostsByUserId
-getPublicPostsByUserId
-getAllPostsByUserId
+getPostsByUserId(userId) done
+getMyPosts() done
 
 deleteUserFollowsByFollowerIdAndFollowingId
 deleteFollowRequestByFollowerIdAndFollowingId
 saveFollowRequest
 createUserFollows
-
 
 */
 
@@ -72,8 +71,7 @@ export default function AccountPage() {
                 if (parId) {
                     await fetchUserById(parId)
 
-                    //sprawdz polaczenie curennt usera z userem z par id
-                    const followed = false;
+                    const followed = await userFollowService.exists(parId)
 
                     if (followed) {
                         setFollowButtonStatus(FollowButtonStatus.Unfollow)
@@ -84,8 +82,7 @@ export default function AccountPage() {
                         setPosts(posts)
 
                     } else {
-                        //sprawdz czy jest follow request current usera na targert = user z par id
-                        const isPending = true
+                        const isPending = await followRequestService.existsFromRequester(parId)
 
                         if (isPending) {
                             setFollowButtonStatus(FollowButtonStatus.WithdrawRequest)

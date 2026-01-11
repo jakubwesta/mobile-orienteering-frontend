@@ -1,0 +1,28 @@
+import { apiGet } from "@/api/api"
+import { apiRoutes } from "@/api/api-routes"
+
+export type Post = {
+    id: number
+    title: string
+    userFullName: string
+    username: string
+    date: string
+    distance: string
+    duration: string
+}
+
+class PostService {
+    async fetchFeed(): Promise<Post[]> {
+        return apiGet<Post[]>(apiRoutes.posts.getFeed())
+    }
+
+    async getMyPosts(): Promise<Post[]> {
+        return apiGet<Post[]>(apiRoutes.posts.myPosts())
+    }
+
+    async getPostsByUserId(userId: string | number): Promise<Post[]> {
+        return apiGet<Post[]>(apiRoutes.posts.byUserId(userId))
+    }
+}
+
+export const postService = new PostService()

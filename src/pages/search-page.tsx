@@ -1,29 +1,14 @@
 import { useState } from "react"
-import type { UserResult } from "@/types/user-results"
+
 import UserCard from "@/components/search/user-card"
+import { userService, type UserSearchResult } from "@/services/user.service";
 
-/*
-API TO DO:
-fetchUsersBySearchQuery
-*/
-
-
-const allUsers: UserResult[] = [
-    { id: 1, fullName: "Anna Kowalska", username: "annaK" },
-    { id: 2, fullName: "Jan Nowak", username: "janN" },
-    { id: 3, fullName: "Piotr Wiśniewski", username: "piotrW" },
-    { id: 4, fullName: "Karolina Zielińska", username: "karolinaZ" },
-    { id: 5, fullName: "Michał Lewandowski", username: "michalL" },
-    { id: 6, fullName: "Ewa Dąbrowska", username: "ewaD" },
-    { id: 7, fullName: "Tomasz Kamiński", username: "tomaszK" },
-    { id: 8, fullName: "Magdalena Kowal", username: "magdalenaK" },
-]
 
 export default function SearchPage() {
     const [searchQuery, setSearchQuery] = useState("")
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
-    const [users, setUsers] = useState<UserResult[]>([])
+    const [users, setUsers] = useState<UserSearchResult[]>([])
 
 
     const onSearchSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -34,8 +19,8 @@ export default function SearchPage() {
         }
         setLoading(true);
         try {
-            //const fetchedUsers = await fetchUsersBySearchQuery(searchQuery);
-            setUsers(allUsers);
+            const fetchedUserResults = await userService.searchUsers(searchQuery)
+            setUsers(fetchedUserResults);
             setError(null);
         } catch (err) {
             console.log(err);

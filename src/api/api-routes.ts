@@ -13,27 +13,29 @@ export const apiRoutes = {
     getById: (id: string | number) => `${API_PREFIX}/users/${id}`,
     update: (id: string | number) => `${API_PREFIX}/users/${id}`,
     delete: (id: string | number) => `${API_PREFIX}/users/${id}`,
+    search: (query: string) => `${API_PREFIX}/users?query=${encodeURIComponent(query)}`,
   },
 
   userFollows: {
     create: () => `${API_PREFIX}/user-follows`,
-    exists: () => `${API_PREFIX}/user-follows/exists`,
+    exists: (followingId: number | string) => `${API_PREFIX}/user-follows/${followingId}/exists`,
     delete: (followerId: string | number, followingId: string | number) =>
       `${API_PREFIX}/user-follows/${followerId}/${followingId}`,
+
   },
 
   followRequests: {
     create: () => `${API_PREFIX}/follow-requests`,
     getById: (id: string | number) => `${API_PREFIX}/follow-requests/${id}`,
     delete: (id: string | number) => `${API_PREFIX}/follow-requests/${id}`,
+    pending: () => `${API_PREFIX}/follow-requests/pending`,
     accept: (id: string | number) => `${API_PREFIX}/follow-requests/${id}/accept`,
     reject: (id: string | number) => `${API_PREFIX}/follow-requests/${id}/reject`,
-    pendingForTarget: (id: string | number) =>
-      `${API_PREFIX}/follow-requests/targets/${id}/pending`,
     byRequesterAndTarget: (
       requesterId: string | number,
       targetId: string | number,
     ) => `${API_PREFIX}/follow-requests/requester/${requesterId}/target/${targetId}`,
+    existsFromRequester: (requesterId: number | string) => `${API_PREFIX}/follow-requests/from/${requesterId}/exists`,
   },
 
   posts: {
@@ -43,6 +45,9 @@ export const apiRoutes = {
     byUser: (userId: string | number) => `${API_PREFIX}/posts/users/${userId}`,
     publicByUser: (userId: string | number) =>
       `${API_PREFIX}/posts/users/${userId}/public`,
+    getFeed: () => `${API_PREFIX}/feed`,
+    myPosts: () => `${API_PREFIX}/posts/me`,
+    byUserId: (userId: string | number) => `${API_PREFIX}/posts/user/${userId}`,
   },
 
   maps: {

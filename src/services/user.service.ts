@@ -20,6 +20,12 @@ export type UpdateUserRequest = {
   newPassword?: string
 }
 
+export type UserSearchResult = {
+  id: number
+  fullName: string
+  username: string
+}
+
 class UserService {
   async getCurrentUser(): Promise<User> {
     return apiGet<User>(apiRoutes.users.me())
@@ -38,6 +44,10 @@ class UserService {
 
   async deleteUser(id: number | string): Promise<void> {
     return apiDelete<void>(apiRoutes.users.delete(id))
+  }
+
+  async searchUsers(query: string): Promise<UserSearchResult[]> {
+    return apiGet<UserSearchResult[]>(apiRoutes.users.search(query))
   }
 }
 

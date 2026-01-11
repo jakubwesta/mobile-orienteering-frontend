@@ -1,32 +1,12 @@
+import { followRequestService, type PendingFollowRequest } from "@/services/follow-request.service";
+import { userFollowService } from "@/services/user-follows.service";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-/*
-API TO DO:
-findPendingForTarget (res with fullname and username)
-deleteByFollowerIdAndFollowingId
-createUserFollows
-
---
-*/
-
-const requestsDemo: Request[] = [
-    { id: 1, requesterId: 123, requesterFullName: "Jan Kowalski", requesterUserName: "janek123" },
-    { id: 2, requesterId: 456, requesterFullName: "Anna Nowak", requesterUserName: "anna_n" },
-    { id: 3, requesterId: 789, requesterFullName: "Piotr Wiśniewski", requesterUserName: "piotrek_w" },
-];
-
-type Request = {
-    id: number;
-    requesterId: number;
-    requesterFullName: string;
-    requesterUserName: string;
-};
 
 function PendingPage() {
-    const navigate = useNavigate();
-
-    const [requests, setRequests] = useState<Request[]>([]);
+    const navigate = useNavigate()
+    const [requests, setRequests] = useState<PendingFollowRequest[]>([])
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
 
@@ -34,8 +14,8 @@ function PendingPage() {
     useEffect(() => {
         const getRequestsDetails = async () => {
             try {
-                //const requests = await fetchRequests()
-                setRequests(requestsDemo)
+                const data = await followRequestService.findMyPending()
+                setRequests(data)
             } catch (err) {
                 console.log(err);
                 setError("Error loading movies");
@@ -46,16 +26,32 @@ function PendingPage() {
         getRequestsDetails()
     }, [])
 
-    const onAcceptClick = (requestId: number) => {
-        //make userfollows connection
-        //delete followrequest
-        setRequests(prevRequests => prevRequests.filter(request => request.id !== requestId));
-        alert(requestId)
+    const onAcceptClick = async (requestId: number, requesterId: number) => {
+        try {
+            setLoading(true);
+            await userFollowService.createFollow({
+                followingId: requesterId,
+            })
+
+            await followRequestService.acceptRequest(requestId)
+
+            setRequests(prevRequests => prevRequests.filter(request => request.id !== requestId));
+        } catch {
+            setError("Error accepting request")
+        } finally {
+            setLoading(false)
+        }
     }
 
-    const onDenyClick = (requestId: number) => {
-        //delete followreques connection
-        setRequests(prevRequests => prevRequests.filter(request => request.id !== requestId));
+    const onDenyClick = async (requestId: number) => {
+        try {
+            await followRequestService.deleteRequest(requestId)
+
+            setRequests(prevRequests => prevRequests.filter(request => request.id !== requestId));
+        } catch {
+            setError("Error denying request")
+        }
+
         alert(requestId)
     }
 
@@ -70,7 +66,7 @@ function PendingPage() {
         {requests.map((request) => (<div key={request.id} onClick={() => onCardClick(request.requesterId)}>
             <p>{request.requesterFullName}</p>
             <p>{request.requesterUserName}</p>
-            <button type="button" onClick={(e) => { e.stopPropagation(); onAcceptClick(request.id); }}>
+            <button type="button" onClick={(e) => { e.stopPropagation(); onAcceptClick(request.id, request.requesterId); }}>
                 Accept
             </button>
             <button type="button" onClick={(e) => { e.stopPropagation(); onDenyClick(request.id); }}>
