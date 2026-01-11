@@ -1,7 +1,7 @@
 import PostCard from "@/components/feed/post-card"
 import type { Post } from "@/types/post"
 import { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { useUser } from "@/hooks/use-user"
 import type { User } from "@/services/user.service"
 
@@ -12,6 +12,13 @@ existsByFollowerIdAndFollowingId
 getPublicAndFollowersPostsByUserId
 getPublicPostsByUserId
 getAllPostsByUserId
+
+deleteUserFollowsByFollowerIdAndFollowingId
+deleteFollowRequestByFollowerIdAndFollowingId
+saveFollowRequest
+createUserFollows
+
+
 */
 
 const userPosts: Post[] = [
@@ -44,6 +51,7 @@ const followButtonText: Record<FollowButtonStatusType, string> = {
 
 
 export default function AccountPage() {
+    const navigate = useNavigate()
     const { currentUser, viewedUser, fetchCurrentUser, fetchUserById } = useUser()
     const params = useParams();
     const parId: string | undefined = params.id;
@@ -141,18 +149,27 @@ export default function AccountPage() {
         loadPostsByVisibility();
     }, [followButtonStatus])
 
-    const handleClick = () => {
+    const handleMainButtonClick = async () => {
         if (followButtonStatus === FollowButtonStatus.Unfollow) {
+            // delete userfollows connection between current user and user with par id
             setFollowButtonStatus(FollowButtonStatus.Follow)
         } else if (followButtonStatus === FollowButtonStatus.WithdrawRequest) {
+            // delete follow request send by current user to user with par id
             setFollowButtonStatus(FollowButtonStatus.Follow)
         } else if (followButtonStatus === FollowButtonStatus.Follow) {
-            if (userToShow?.private) {
+            if (userToShow?.private!) {
+                // create follow request by current user to user with par id
                 setFollowButtonStatus(FollowButtonStatus.WithdrawRequest)
             } else {
+                // create userfollows connection between curretn user and user with par id
                 setFollowButtonStatus(FollowButtonStatus.Unfollow)
             }
         }
+    }
+
+    const handleFollowRequestButtonClick = () => {
+        alert("info click")
+        navigate(`/pending`)
     }
 
     if (loading) return <p>Loading...</p>
@@ -162,11 +179,12 @@ export default function AccountPage() {
     return (
         <div>
             <div>
+                {userToShow.private && !parId && <button type="button" onClick={handleFollowRequestButtonClick}>handle pending follow request</button>}
                 <p>posts</p>
                 <p>{posts.length}</p>
                 <p>{userToShow.fullName}</p>
                 <p>@{userToShow.username}</p>
-                {parId && <button type="button" onClick={handleClick}>{followButtonText[followButtonStatus]}</button>}
+                {parId && <button type="button" onClick={handleMainButtonClick}>{followButtonText[followButtonStatus]}</button>}
                 <div>
                     {userPosts.map((post) => (
                         <PostCard

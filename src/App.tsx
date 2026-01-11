@@ -10,6 +10,7 @@ import { ThemeProvider } from '@/providers/theme.provider'
 import AuthPage from '@/pages/auth-page'
 import SearchPage from './pages/search-page'
 import AccountPage from './pages/account-page'
+import PendingPage from './pages/pending-follow-reqs'
 
 const AppRoutes = () => {
   const location = useLocation()
@@ -72,6 +73,14 @@ const AppRoutes = () => {
             element={
               <ProtectedRoute requiresAuth>
                 <AccountPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/pending"
+            element={
+              <ProtectedRoute requiresAuth>
+                <PendingPage />
               </ProtectedRoute>
             }
           />
