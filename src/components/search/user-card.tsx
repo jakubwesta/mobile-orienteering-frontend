@@ -1,15 +1,14 @@
-import type { UserResult } from "@/types/user-results"
+import type { UserSearchResult } from "@/services/user.service";
 import { useNavigate } from "react-router-dom";
 
 type UserCardProps = {
-    user: UserResult;
+    user: UserSearchResult;
 };
 
 function UserCard({ user }: UserCardProps) {
     const navigate = useNavigate();
 
     const handleClick = () => {
-        alert("info clik")
         navigate(`/user/${user.id}`)
     }
     return (

@@ -21,7 +21,7 @@ class PostService {
     }
 
     async getPostsByUserId(userId: string | number): Promise<Post[]> {
-        return apiGet<Post[]>(apiRoutes.posts.byUserId(userId))
+        return apiGet<Post[]>(apiRoutes.posts.byUser(userId))
     }
 }
 

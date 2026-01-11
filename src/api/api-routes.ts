@@ -18,51 +18,25 @@ export const apiRoutes = {
 
   userFollows: {
     create: () => `${API_PREFIX}/user-follows`,
+    delete: (followingId: number | string) =>
+      `${API_PREFIX}/user-follows/${followingId}`,
     exists: (followingId: number | string) => `${API_PREFIX}/user-follows/${followingId}/exists`,
-    delete: (followerId: string | number, followingId: string | number) =>
-      `${API_PREFIX}/user-follows/${followerId}/${followingId}`,
-
   },
 
   followRequests: {
     create: () => `${API_PREFIX}/follow-requests`,
-    getById: (id: string | number) => `${API_PREFIX}/follow-requests/${id}`,
-    delete: (id: string | number) => `${API_PREFIX}/follow-requests/${id}`,
     pending: () => `${API_PREFIX}/follow-requests/pending`,
-    accept: (id: string | number) => `${API_PREFIX}/follow-requests/${id}/accept`,
-    reject: (id: string | number) => `${API_PREFIX}/follow-requests/${id}/reject`,
-    byRequesterAndTarget: (
-      requesterId: string | number,
-      targetId: string | number,
-    ) => `${API_PREFIX}/follow-requests/requester/${requesterId}/target/${targetId}`,
+    accept: (requestId: string | number) => `${API_PREFIX}/follow-requests/${requestId}/accept`,
+    reject: (requestId: string | number) => `${API_PREFIX}/follow-requests/${requestId}/reject`,
     existsFromRequester: (requesterId: number | string) => `${API_PREFIX}/follow-requests/from/${requesterId}/exists`,
+    withdraw: (targetUserId: number | string) =>
+      `${API_PREFIX}/follow-requests/to/${targetUserId}`,
   },
 
   posts: {
-    create: () => `${API_PREFIX}/posts`,
-    getById: (id: string | number) => `${API_PREFIX}/posts/${id}`,
-    delete: (id: string | number) => `${API_PREFIX}/posts/${id}`,
-    byUser: (userId: string | number) => `${API_PREFIX}/posts/users/${userId}`,
-    publicByUser: (userId: string | number) =>
-      `${API_PREFIX}/posts/users/${userId}/public`,
     getFeed: () => `${API_PREFIX}/feed`,
+    byUser: (userId: string | number) => `${API_PREFIX}/posts/users/${userId}`,
     myPosts: () => `${API_PREFIX}/posts/me`,
-    byUserId: (userId: string | number) => `${API_PREFIX}/posts/user/${userId}`,
-  },
-
-  maps: {
-    create: () => `${API_PREFIX}/maps`,
-    getById: (id: string | number) => `${API_PREFIX}/maps/${id}`,
-    delete: (id: string | number) => `${API_PREFIX}/maps/${id}`,
-    byUser: (userId: string | number) => `${API_PREFIX}/maps/user/${userId}`,
-  },
-
-  activities: {
-    create: () => `${API_PREFIX}/activities`,
-    getById: (id: string | number) => `${API_PREFIX}/activities/${id}`,
-    delete: (id: string | number) => `${API_PREFIX}/activities/${id}`,
-    byUser: (userId: string | number) => `${API_PREFIX}/activities/user/${userId}`,
-    byMap: (mapId: string | number) => `${API_PREFIX}/activities/map/${mapId}`,
   },
 } as const
 

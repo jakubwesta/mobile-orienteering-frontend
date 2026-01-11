@@ -18,7 +18,7 @@ function PendingPage() {
                 setRequests(data)
             } catch (err) {
                 console.log(err);
-                setError("Error loading movies");
+                setError("Error loading request details");
             } finally {
                 setLoading(false);
             }
@@ -29,9 +29,7 @@ function PendingPage() {
     const onAcceptClick = async (requestId: number, requesterId: number) => {
         try {
             setLoading(true);
-            await userFollowService.createFollow({
-                followingId: requesterId,
-            })
+            await userFollowService.follow(requesterId)
 
             await followRequestService.acceptRequest(requestId)
 
@@ -43,13 +41,13 @@ function PendingPage() {
         }
     }
 
-    const onDenyClick = async (requestId: number) => {
+    const onRejectClick = async (requestId: number) => {
         try {
-            await followRequestService.deleteRequest(requestId)
+            await followRequestService.rejectRequest(requestId)
 
             setRequests(prevRequests => prevRequests.filter(request => request.id !== requestId));
         } catch {
-            setError("Error denying request")
+            setError("Error rejecting request")
         }
 
         alert(requestId)
@@ -69,8 +67,8 @@ function PendingPage() {
             <button type="button" onClick={(e) => { e.stopPropagation(); onAcceptClick(request.id, request.requesterId); }}>
                 Accept
             </button>
-            <button type="button" onClick={(e) => { e.stopPropagation(); onDenyClick(request.id); }}>
-                Deny
+            <button type="button" onClick={(e) => { e.stopPropagation(); onRejectClick(request.id); }}>
+                Reject
             </button>
         </div>))}
     </div>)

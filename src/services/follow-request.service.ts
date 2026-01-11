@@ -17,9 +17,9 @@ class FollowRequestService {
     }
 
 
-    async deleteRequest(requestId: number) {
+    async rejectRequest(requestId: number) {
         return apiDelete<void>(
-            apiRoutes.followRequests.delete(requestId),
+            apiRoutes.followRequests.reject(requestId),
         )
     }
 
@@ -31,6 +31,16 @@ class FollowRequestService {
 
     async existsFromRequester(requesterId: number | string): Promise<boolean> {
         return apiGet<boolean>(apiRoutes.followRequests.existsFromRequester(requesterId))
+    }
+
+    async withdraw(targetUserId: number | string): Promise<void> {
+        return apiDelete<void>(apiRoutes.followRequests.withdraw(targetUserId))
+    }
+
+    async create(targetUserId: number | string): Promise<void> {
+        return apiPost<void>(apiRoutes.followRequests.create(), {
+            targetUserId,
+        })
     }
 }
 
