@@ -1,5 +1,4 @@
 import { followRequestService, type PendingFollowRequest } from "@/services/follow-request.service";
-import { userFollowService } from "@/services/user-follows.service";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -26,13 +25,11 @@ function PendingPage() {
         getRequestsDetails()
     }, [])
 
-    const onAcceptClick = async (requestId: number, requesterId: number) => {
+    const onAcceptClick = async (requestId: number) => {
         try {
             setLoading(true);
-            await userFollowService.follow(requesterId)
 
             await followRequestService.acceptRequest(requestId)
-
             setRequests(prevRequests => prevRequests.filter(request => request.id !== requestId));
         } catch {
             setError("Error accepting request")
@@ -64,7 +61,7 @@ function PendingPage() {
         {requests.map((request) => (<div key={request.id} onClick={() => onCardClick(request.requesterId)}>
             <p>{request.requesterFullName}</p>
             <p>{request.requesterUserName}</p>
-            <button type="button" onClick={(e) => { e.stopPropagation(); onAcceptClick(request.id, request.requesterId); }}>
+            <button type="button" onClick={(e) => { e.stopPropagation(); onAcceptClick(request.id); }}>
                 Accept
             </button>
             <button type="button" onClick={(e) => { e.stopPropagation(); onRejectClick(request.id); }}>

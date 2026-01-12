@@ -130,6 +130,7 @@ export default function AccountPage() {
     if (loading) return <p>Loading...</p>
     if (error) return <p>{error}</p>
     if (!userToShow) return <p>User not found</p>
+    if (!currentUser) return <p>User not logged</p>
 
     return (
         <div>
@@ -139,7 +140,7 @@ export default function AccountPage() {
                 <p>{posts.length}</p>
                 <p>{userToShow.fullName}</p>
                 <p>@{userToShow.username}</p>
-                {parId && <button type="button" onClick={handleMainButtonClick}>{followButtonText[followButtonStatus]}</button>}
+                {currentUser.id !== userToShow.id && parId && <button type="button" onClick={handleMainButtonClick}>{followButtonText[followButtonStatus]}</button>}
                 <div>
                     {posts.map((post) => (
                         <PostCard
