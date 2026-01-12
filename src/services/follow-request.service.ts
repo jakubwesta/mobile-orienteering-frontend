@@ -29,8 +29,8 @@ class FollowRequestService {
         )
     }
 
-    async existsFromRequester(requesterId: number | string): Promise<boolean> {
-        return apiGet<boolean>(apiRoutes.followRequests.existsFromRequester(requesterId))
+    async existsToTarget(targetId: number | string): Promise<boolean> {
+        return apiGet<boolean>(apiRoutes.followRequests.existsToTarget(targetId))
     }
 
     async withdraw(targetUserId: number | string): Promise<void> {

@@ -28,13 +28,13 @@ export const apiRoutes = {
     pending: () => `${API_PREFIX}/follow-requests/pending`,
     accept: (requestId: string | number) => `${API_PREFIX}/follow-requests/${requestId}/accept`,
     reject: (requestId: string | number) => `${API_PREFIX}/follow-requests/${requestId}/reject`,
-    existsFromRequester: (requesterId: number | string) => `${API_PREFIX}/follow-requests/from/${requesterId}/exists`,
+    existsToTarget: (targetId: number | string) => `${API_PREFIX}/follow-requests/to/${targetId}/exists`,
     withdraw: (targetUserId: number | string) =>
       `${API_PREFIX}/follow-requests/to/${targetUserId}`,
   },
 
   posts: {
-    getFeed: () => `${API_PREFIX}/feed`,
+    getFeed: () => `${API_PREFIX}/posts/feed`,
     byUser: (userId: string | number) => `${API_PREFIX}/posts/users/${userId}`,
     myPosts: () => `${API_PREFIX}/posts/me`,
   },

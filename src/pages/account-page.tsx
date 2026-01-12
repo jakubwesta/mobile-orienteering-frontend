@@ -52,7 +52,7 @@ export default function AccountPage() {
                     if (followed) {
                         setFollowButtonStatus(FollowButtonStatus.Unfollow)
                     } else {
-                        const isPending = await followRequestService.existsFromRequester(parId)
+                        const isPending = await followRequestService.existsToTarget(parId)
 
                         if (isPending) {
                             setFollowButtonStatus(FollowButtonStatus.WithdrawRequest)
