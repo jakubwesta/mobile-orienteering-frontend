@@ -46,8 +46,6 @@ function PendingPage() {
         } catch {
             setError("Error rejecting request")
         }
-
-        alert(requestId)
     }
 
     const onCardClick = (requesterId: number) => {

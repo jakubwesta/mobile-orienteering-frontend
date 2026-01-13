@@ -4,6 +4,8 @@ import { apiRoutes } from "@/api/api-routes"
 export type PendingFollowRequest = {
     id: number
     requesterId: number
+    targetId: number
+    createdAt: string
     requesterFullName: string
     requesterUserName: string
 }
@@ -37,9 +39,9 @@ class FollowRequestService {
         return apiDelete<void>(apiRoutes.followRequests.withdraw(targetUserId))
     }
 
-    async create(targetUserId: number | string): Promise<void> {
+    async create(targetId: number | string): Promise<void> {
         return apiPost<void>(apiRoutes.followRequests.create(), {
-            targetUserId,
+            targetId,
         })
     }
 }
