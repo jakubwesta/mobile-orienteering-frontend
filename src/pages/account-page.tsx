@@ -148,7 +148,7 @@ export default function AccountPage() {
                             title={post.title}
                             userFullName={post.userFullName}
                             username={post.username}
-                            date={post.date}
+                            date={post.createdAt}
                             distance={post.distance}
                             duration={post.duration}
                         />

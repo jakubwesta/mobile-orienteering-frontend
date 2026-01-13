@@ -1,12 +1,18 @@
 import { apiGet } from "@/api/api"
 import { apiRoutes } from "@/api/api-routes"
 
+
 export type Post = {
     id: number
+    userId: number
+    content: string
+    mapId: number
+    activityId: number
+    visibility: string
+    createdAt: string
     title: string
     userFullName: string
     username: string
-    date: string
     distance: string
     duration: string
 }
