@@ -26,24 +26,25 @@ const FeedPage = () => {
     getFeed()
   }, [])
 
-  if (loading) return <p>Loading...</p>
-  if (error) return <p>{error}</p>
+  if (loading) return <p className="text-left ml-8 text-gray-600 dark:text-gray-400 py-8">Loading...</p>
+  if (error) return <p className="text-left ml-8 text-red-600 dark:text-red-400 py-8">{error}</p>
 
   return (
-    <div>
-      {posts.map((post) => (
-        <PostCard
-          key={post.id}
-          title={post.title}
-          userFullName={post.userFullName}
-          username={post.username}
-          date={post.createdAt}
-          distance={post.distance}
-          duration={post.duration}
-        />
-      ))}
+    <div className="min-h-screen bg-gray-50 dark:bg-black transition-colors duration-300">
+      <div className="max-w-4xl pt-6 pb-6 pl-12 space-y-6">
+        {posts.map((post) => (
+          <PostCard
+            key={post.id}
+            title={post.title}
+            userFullName={post.userFullName}
+            username={post.username}
+            date={post.createdAt}
+            distance={post.distance}
+            duration={post.duration}
+          />
+        ))}
+      </div>
     </div>
   )
 }
-
 export default FeedPage

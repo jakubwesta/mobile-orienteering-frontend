@@ -1,8 +1,6 @@
 function MapCard() {
     return (
-        <div>
-            Map placeholder
-        </div>
+        <div className="w-full h-48 bg-gray-200 dark:bg-gray-700 rounded-t-lg" />
     )
 }
 
