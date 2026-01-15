@@ -128,55 +128,64 @@ export default function AccountPage() {
         navigate(`/pending`)
     }
 
-    if (loading) return <p className="text-left ml-8 text-gray-600 dark:text-gray-400 py-8">Loading...</p>
-    if (error) return <p className="text-left ml-8 text-red-600 dark:text-red-400 py-8">{error}</p>
-    if (!userToShow) return <p className="text-left ml-8 text-gray-600 dark:text-gray-400 py-8">User not found</p>
-    if (!currentUser) return <p className="text-left ml-8 text-gray-600 dark:text-gray-400 py-8">User not logged</p>
+    if (loading) return <p className="text-left px-4 sm:px-6 md:pl-12 text-gray-600 dark:text-gray-400 py-8">Loading...</p>
+    if (error) return <p className="text-left px-4 sm:px-6 md:pl-12 text-red-600 dark:text-red-400 py-8">{error}</p>
+    if (!userToShow) return <p className="text-left px-4 sm:px-6 md:pl-12 text-gray-600 dark:text-gray-400 py-8">User not found</p>
+    if (!currentUser) return <p className="text-left px-4 sm:px-6 md:pl-12 text-gray-600 dark:text-gray-400 py-8">User not logged</p>
 
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-black transition-colors duration-300">
-            <div className="max-w-4xl pt-6 pb-6 pl-12">
-                {userToShow.private && !parId && <Button type="button"
-                    onClick={handleFollowRequestButtonClick}
-                    variant={"outline"}
-                    size={"lg"}>Pending follow requests</Button>}
-                <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-lg p-8 mb-6 mt-6">
-                    <div className="flex items-start justify-between">
-                        <div className="flex items-center space-x-4">
-                            <div className="w-20 h-20 bg-linear-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-3xl font-bold">
+            <div className="max-w-4xl pt-4 pb-6 px-4 sm:px-6 md:pl-12">
+                {userToShow.private && !parId && (
+                    <Button
+                        type="button"
+                        onClick={handleFollowRequestButtonClick}
+                        variant={"outline"}
+                        size={"lg"}
+                        className="w-full sm:w-auto"
+                    >
+                        Pending follow requests
+                    </Button>
+                )}
+                <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-lg p-4 sm:p-6 md:p-8 mb-6 mt-4 sm:mt-6">
+                    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+                        <div className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-4">
+                            <div className="w-16 h-16 sm:w-20 sm:h-20 bg-linear-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-2xl sm:text-3xl font-bold shrink-0">
                                 {userToShow.fullName.charAt(0)}
                             </div>
                             <div>
-                                <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+                                <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
                                     {userToShow.fullName}
                                 </h1>
-                                <p className="text-lg text-gray-500 dark:text-gray-400">
+                                <p className="text-base sm:text-lg text-gray-500 dark:text-gray-400">
                                     @{userToShow.username}
                                 </p>
-                                <div className="mt-2 flex items-center space-x-4">
-                                    <div className="text-center">
+                                <div className="mt-2 flex items-center justify-center sm:justify-start space-x-4">
+                                    <div className="text-center sm:text-left">
                                         <p className="text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">posts</p>
-                                        <p className="text-2xl font-bold text-gray-900 dark:text-white">{posts.length}</p>
+                                        <p className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">{posts.length}</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         <div className="flex flex-col space-y-2">
-
-
-                            {currentUser.id !== userToShow.id && parId && <Button
-                                type="button"
-                                onClick={handleMainButtonClick}
-                                variant={followButtonStatus === FollowButtonStatus.Follow ? "default" : "outline"}
-                                size={"lg"}>
-                                {followButtonText[followButtonStatus]}
-                            </Button>}
+                            {currentUser.id !== userToShow.id && parId && (
+                                <Button
+                                    type="button"
+                                    onClick={handleMainButtonClick}
+                                    variant={followButtonStatus === FollowButtonStatus.Follow ? "default" : "outline"}
+                                    size={"lg"}
+                                    className="w-full sm:w-auto"
+                                >
+                                    {followButtonText[followButtonStatus]}
+                                </Button>
+                            )}
                         </div>
                     </div>
                 </div>
 
-                <div className="space-y-6">
+                <div className="space-y-4 sm:space-y-6">
                     {posts.map((post) => (
                         <PostCard
                             key={post.id}

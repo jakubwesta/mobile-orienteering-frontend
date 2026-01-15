@@ -99,7 +99,7 @@ function App() {
         <div className="flex h-screen overflow-hidden">
           {isAuthenticated ? <AppSidebar /> : null}
 
-          <div className="min-w-0 flex-1 overflow-y-auto">
+          <div className={`min-w-0 flex-1 overflow-y-auto ${isAuthenticated ? 'pb-16 md:pb-0' : ''}`}>
             <AppRoutes />
           </div>
         </div>
