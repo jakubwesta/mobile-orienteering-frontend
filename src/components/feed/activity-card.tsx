@@ -74,7 +74,7 @@ function ActivityCard({ title, userFullName, username, date, distance, duration 
                                 <circle cx="12" cy="10" r="3" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
                             <span className="text-[10px] sm:text-xs font-medium uppercase tracking-wide">
-                                Dystans
+                                Distance
                             </span>
                         </div>
                         <p className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
@@ -89,7 +89,7 @@ function ActivityCard({ title, userFullName, username, date, distance, duration 
                                 <polyline points="12 6 12 12 16 14" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
                             <span className="text-[10px] sm:text-xs font-medium uppercase tracking-wide">
-                                Czas
+                                Duration
                             </span>
                         </div>
                         <p className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">

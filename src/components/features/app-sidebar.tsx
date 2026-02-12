@@ -39,7 +39,7 @@ type NavItem = {
 const NAV_ITEMS: NavItem[] = [
 	{ label: 'Feed', to: '/feed', Icon: RssIcon },
 	{ label: 'Search', to: '/search', Icon: SearchIcon },
-	{ label: 'Activities', to: '/activities', Icon: ActivityIcon },
+	{ label: 'Account', to: '/activities', Icon: ActivityIcon },
 	{ label: 'Dashboard', to: '/dashboard', Icon: LayoutDashboardIcon },
 ]
 
@@ -139,11 +139,10 @@ const MobileBottomNav = () => {
 							<Link
 								key={item.to}
 								to={item.to}
-								className={`flex flex-col items-center justify-center flex-1 h-full py-2 transition-colors ${
-									isActive
+								className={`flex flex-col items-center justify-center flex-1 h-full py-2 transition-colors ${isActive
 										? 'text-primary'
 										: 'text-muted-foreground hover:text-foreground'
-								}`}
+									}`}
 								aria-current={isActive ? 'page' : undefined}
 							>
 								<item.Icon
