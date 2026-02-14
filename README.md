@@ -6,7 +6,7 @@ Orienteering Web is a web application for orienteering enthusiasts. It allows us
 
 ## 🔗 **Related Repositories**
 
-- [Backend](https://github.com/stanislawkaczmarek1/OrienteeringApp)
+- [Backend](https://github.com/stanislawkaczmarek1/orienteering-app)
 - [Mobile Application](https://github.com/jakubwesta/mobile-orienteering)
 
 ---
